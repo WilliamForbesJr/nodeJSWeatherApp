@@ -4,13 +4,13 @@ const forecast = (latitude, longitude, callback) => {
 
     const url = 'https://api.darksky.net/forecast/17ec94c78d7bd2c8566f6c8c35f1c9d8/' + longitude + ',' + latitude
 
-    request({ url: url, json: true }, (error, response) => {
+    request({ url, json: true }, (error, { body: { error:returnError, daily:{data}, currently } } ) => {
         if (error) {
             console.log('Unable to connect to weather service');
-        } else if (response.body.error) {
+        } else if (returnError) {
             console.log('Unable to fetch location')
         } else {
-            callback(undefined, `${response.body.daily.data[0].summary} It is currently ${response.body.currently.temperature} degrees out. There is a ${response.body.currently.precipProbability}% chance of rain`)
+            callback(undefined, `${data[0].summary} It is currently ${currently.temperature} degrees out. There is a ${currently.precipProbability}% chance of rain`)
         }
     })
 }
